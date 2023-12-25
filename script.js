@@ -3,7 +3,7 @@ const timeDisplay = document.getElementById("time-display");
 const startBtn = document.getElementById("start-btn");
 const lossDisplay = document.getElementById("losses");
 const winsDisplay = document.getElementById("wins");
-
+const secondsPelement = document.getElementById("seconds");
 
 
 let wordsLibrary = ["javascript", "html", "apple", "house", "believe", "bootcamp"];
@@ -16,6 +16,26 @@ let losses = 0;
 let gameTime = 10;
 
 
+function getData() {
+	secondsPelement.textContent = "";
+
+    let localWins = localStorage.getItem("wins");
+    let localLosses = localStorage.getItem("losses");
+
+	if (localWins === null) {
+		winsDisplay.textContent = 0;
+	} else {
+		winsDisplay.textContent = localWins;
+	}
+
+	if (localLosses === null) {
+		lossDisplay.textContent = 0;
+	} else {
+		lossDisplay.textContent = localLosses;
+	}
+}
+
+getData();
 
 startBtn.addEventListener("click", startGame);
 
@@ -71,12 +91,17 @@ function checkWord() {
 
 
 function timer() {
-    gameTime = 25;
+    gameTime = 10;
+
+	secondsPelement.textContent = "seconds remaining";
 
     intervalId = setInterval(function() {
         if (gameTime >= 0) {
             timeDisplay.textContent = gameTime;
             gameTime--;
+			if (gameTime <= 0) {
+				secondsPelement.textContent = "second remaining"
+			}
         } else {
             clearInterval(intervalId);
             gameOver();
@@ -86,6 +111,8 @@ function timer() {
 }
 
 function startGame() {
+	getData();
+    clearInterval(intervalId);
     wordContainer.textContent = "";
     randomWord = [];
     hiddenWord = [];
@@ -101,8 +128,11 @@ function checkWinner() {
         alert("You've guessed the word!")
         wins++;
         document.removeEventListener("keydown", keyHandler);
+		
     }
     winsDisplay.textContent = wins;
+	localStorage.setItem("wins", wins);
+    
 }
 
 function gameOver() {
@@ -110,4 +140,6 @@ function gameOver() {
     wordContainer.innerHTML = randomWord.join("");
     losses++;
     lossDisplay.textContent = losses;
+    localStorage.setItem("losses", losses);
 }
+
