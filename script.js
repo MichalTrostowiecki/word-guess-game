@@ -1,11 +1,13 @@
 const wordContainer = document.querySelector(".word-container");
-
+const timeDisplay = document.getElementById("time-display");
 
 
 let wordsLibrary = ["javascript", "html", "apple", "house", "believe", "bootcamp"];
 let randomWord = [];
 let hiddenWord = [];
 let userKey;
+let wins = 0;
+let losses = 0;
 
 //Function to pick random word from wordsLibrary
 function chooseRandomWord() {
@@ -54,6 +56,24 @@ function checkWord() {
 }
 
 
+function timer() {
+    let gameTime = 60;
+
+    let intervalId = setInterval(function() {
+        if (gameTime >= 0) {
+            timeDisplay.textContent = gameTime;
+            gameTime--;
+        } else {
+            clearInterval(intervalId);
+        }
+    },1000)
+}
+
+
+
+
+
 hideWord();
 userInput();
 console.log(randomWord);
+timer();
